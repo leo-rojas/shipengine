@@ -16,7 +16,7 @@ class Label
 	 *
 	 * @var bool
 	 */
-	protected $isTestLabel;
+	protected $isTestLabel = false;
 
 	/**
 	 * Label format (pdf, png, zpl)
