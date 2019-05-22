@@ -171,13 +171,12 @@ class ShipEngine
     /**
      * Create a Shipping Label
      *
-     * @param Labels\Shipment $shipment
-     * @param bool            $testMode
+     * @param Labels\Request $request
      * @return Labels\Response
      */
-    public function createLabel(Labels\Shipment $shipment, $testMode = false)
+    public function createLabel(Labels\Request $request)
     {
-        $response = $this->requestFactory->createLabel($shipment, $testMode)->send();
+        $response = $this->requestFactory->createLabel($request)->send();
 
         return new Labels\Response($response->getData());
     }
