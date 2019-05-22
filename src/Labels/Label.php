@@ -19,17 +19,39 @@ class Label
 	protected $isTestLabel;
 
 	/**
-	 * Label format (pdf, png)
+	 * Label format (pdf, png, zpl)
 	 *
 	 * @var string
 	 */
 	protected $labelFormat;
 
+	/**
+	 * Label download type
+	 *
+	 * @var string
+	 */
+	protected $labelDownloadType;
 
-	public function __construct(Shipment $shipment, $isTestLabel = false)
+
+	public function __construct(array $labelData)
 	{
-		$this->shipment    = $shipment;
-		$this->isTestLabel = $isTestLabel;
+		$map = [
+			'shipment'            => 'shipment',
+			'test_label'          => 'isTestLabel',
+			'label_format'        => 'labelFormat',
+			'label_download_type' => 'labelDownloadType'
+		];
+
+		foreach($map as $key => $property)
+		{
+			if(!isset($labelData[$key]))
+			{
+				continue;
+			}
+
+
+			$this->{$property} = $labelData[$key];
+		}
 	}
 
 	/**
@@ -84,6 +106,23 @@ class Label
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getLabelDownloadType()
+	{
+		return $this->labelDownloadType;
+	}
+
+	/**
+	 * @param string $labelDownloadType
+	 * @return void
+	 */
+	public function setLabelDownloadType($labelDownloadType)
+	{
+		$this->labelDownloadType = $labelDownloadType;
+	}
+
+	/**
 	 * Prepare the Label data for transport as an array
 	 *
 	 * @return array
@@ -91,13 +130,23 @@ class Label
 	public function toArray()
 	{
 		$data = [
-			'shipment' => $this->shipment->toArray(),
+			'shipment'   => $this->shipment->toArray(),
 			'test_label' => $this->isTestLabel,
 		];
 
-		if($this->labelFormat)
+		$map = [
+			'label_format'        => 'labelFormat',
+			'label_download_type' => 'labelDownloadType'
+		];
+
+		foreach($map as $key => $property)
 		{
-			$data['label_format'] = $this->labelFormat;
+			if(empty($this->{$property}))
+			{
+				continue;
+			}
+
+			$data[$key] = $this->{$property};
 		}
 
 		return $data;
