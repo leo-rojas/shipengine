@@ -4,6 +4,13 @@ namespace jsamhall\ShipEngine\Labels;
 class Label
 {
 
+	const LABEL_FORMAT_PDF = "pdf";
+	const LABEL_FORMAT_PNG = "png";
+	const LABEL_FORMAT_ZPL = "zpl";
+
+	const DOWNLOAD_TYPE_URL    = "url";
+	const DOWNLOAD_TYPE_INLINE = "inline";
+
 	/**
 	 * Label shipment
 	 *
@@ -36,13 +43,13 @@ class Label
 	public function __construct(array $labelData)
 	{
 		$map = [
-			'shipment'            => 'shipment',
-			'test_label'          => 'isTestLabel',
-			'label_format'        => 'labelFormat',
-			'label_download_type' => 'labelDownloadType'
+			'shipment'            => 'setShipment',
+			'test_label'          => 'setTestLabel',
+			'label_format'        => 'setLabelFormat',
+			'label_download_type' => 'setLabelDownloadType'
 		];
 
-		foreach($map as $key => $property)
+		foreach($map as $key => $setter)
 		{
 			if(!isset($labelData[$key]))
 			{
@@ -50,8 +57,18 @@ class Label
 			}
 
 
-			$this->{$property} = $labelData[$key];
+			$this->$setter($labelData[$key]);
 		}
+	}
+
+	public function getAllowedFormatTypes()
+	{
+		return [static::LABEL_FORMAT_PDF, static::LABEL_FORMAT_PNG, static::LABEL_FORMAT_ZPL];
+	}
+
+	public function getAllowedDownloadTypes()
+	{
+		return [static::DOWNLOAD_TYPE_URL, static::DOWNLOAD_TYPE_INLINE];
 	}
 
 	/**
@@ -102,6 +119,11 @@ class Label
 	 */
 	public function setLabelFormat($labelFormat)
 	{
+		if(!in_array($labelFormat, $this->getAllowedFormatTypes()))
+		{
+			throw new \Exception($labelFormat . " not allowed as a format type.  Allowable types: " . implode(", ", $this->getAllowedFormatTypes()));
+		}
+
 		$this->labelFormat = $labelFormat;
 	}
 
@@ -119,6 +141,11 @@ class Label
 	 */
 	public function setLabelDownloadType($labelDownloadType)
 	{
+		if(!in_array($labelDownloadType, $this->getAllowedDownloadTypes()))
+		{
+			throw new \Exception($labelDownloadType . " not allowed as a download type.  Allowable types: " . implode(", ", $this->getAllowedDownloadTypes()));
+		}
+
 		$this->labelDownloadType = $labelDownloadType;
 	}
 
