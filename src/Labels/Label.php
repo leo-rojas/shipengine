@@ -1,7 +1,7 @@
 <?php
 namespace jsamhall\ShipEngine\Labels;
 
-class Request
+class Label
 {
 
 	/**
