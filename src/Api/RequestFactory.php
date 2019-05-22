@@ -178,17 +178,13 @@ class RequestFactory
      * @return Request
      */
     public function createLabel(
-        ShipEngine\Labels\Shipment $shipment,
-        $testMode = false
+        ShipEngine\Labels\Request $request
     ) {
         $url = $this->buildUrl('labels');
 
         return $this->initRequest($url, [
             CURLOPT_POST       => true,
-            CURLOPT_POSTFIELDS => json_encode([
-                'shipment'   => $shipment->toArray(),
-                'test_label' => $testMode
-            ])
+            CURLOPT_POSTFIELDS => json_encode($request->toArray())
         ]);
     }
 
