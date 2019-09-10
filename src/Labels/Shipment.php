@@ -40,6 +40,28 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
      */
     protected $advancedOptions = [];
 
+    /**
+     * Optional labelMessage1
+     *
+     * @var string - Additional message to appear on shipping label
+     */
+    protected $labelMessage1 = "";
+
+    /**
+     * Optional labelMessage2
+     *
+     * @var string - Additional message to appear on shipping label
+     */
+    protected $labelMessage2 = "";
+
+    /**
+     * Optional labelMessage3
+     *
+     * @var string - Additional message to appear on shipping label
+     */
+    protected $labelMessage3 = "";
+
+
     public function __construct(
         ShipEngine\Carriers\ServiceCode $service,
         ShipEngine\Address\Address $shipTo,
@@ -95,6 +117,21 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
         return $this;
     }
 
+    public function setLabelMessage1($message)
+    {
+        $this->labelMessage1 = $message;
+    }
+
+    public function setLabelMessage2($message)
+    {
+        $this->labelMessage2 = $message;
+    }
+
+    public function setLabelMessage3($message)
+    {
+        $this->labelMessage3 = $message;
+    }
+
     /**
      * Prepare the Shipment Data for transport as an array
      *
@@ -119,6 +156,25 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
                 /** @var ShipEngine\Carriers\AdvancedOption $option */
                 return [$option->getCode() => $option->getValue()];
             }, $this->advancedOptions);
+        }
+
+        if(!empty($this->labelMessage1) || !empty($this->labelMessage2) || !empty($this->labelMessage3))
+        {
+            if(!isset($data['label_messages']))
+            {
+                $data['label_messages'] = [];
+            }
+
+            $messageKeys = [1, 2, 3];
+            foreach($messageKeys as $key)
+            {
+                $labelKey = "labelMessage" . $key;
+                if(!empty($this->{$labelKey}))
+                {
+                    $requestKey = "reference" . $key;
+                    $data['label_messages'][$requestKey] = $this->{$labelKey};
+                }
+            }
         }
 
         return $data;
