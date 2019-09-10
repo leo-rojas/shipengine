@@ -121,25 +121,6 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
             }, $this->advancedOptions);
         }
 
-        if(!empty($this->labelMessage1) || !empty($this->labelMessage2) || !empty($this->labelMessage3))
-        {
-            if(!isset($data['packages']['label_messages']))
-            {
-                $data['packages']['label_messages'] = [];
-            }
-
-            $messageKeys = [1, 2, 3];
-            foreach($messageKeys as $key)
-            {
-                $labelKey = "labelMessage" . $key;
-                if(!empty($this->{$labelKey}))
-                {
-                    $requestKey = "reference" . $key;
-                    $data['packages']['label_messages'][$requestKey] = $this->{$labelKey};
-                }
-            }
-        }
-
         return $data;
     }
 }
