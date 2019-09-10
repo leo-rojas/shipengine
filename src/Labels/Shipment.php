@@ -160,9 +160,9 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
 
         if(!empty($this->labelMessage1) || !empty($this->labelMessage2) || !empty($this->labelMessage3))
         {
-            if(!isset($data['label_messages']))
+            if(!isset($data['packages']['label_messages']))
             {
-                $data['label_messages'] = [];
+                $data['packages']['label_messages'] = [];
             }
 
             $messageKeys = [1, 2, 3];
