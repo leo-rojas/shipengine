@@ -172,7 +172,7 @@ class Shipment extends ShipEngine\Shipment\AbstractShipment
                 if(!empty($this->{$labelKey}))
                 {
                     $requestKey = "reference" . $key;
-                    $data['label_messages'][$requestKey] = $this->{$labelKey};
+                    $data['packages']['label_messages'][$requestKey] = $this->{$labelKey};
                 }
             }
         }
