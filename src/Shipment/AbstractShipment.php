@@ -80,12 +80,7 @@ abstract class AbstractShipment
             'ship_from' => $this->shipFrom->toArray(),
             'packages'  => array_map(function ($package) {
                 /** @var ShipEngine\Shipment\Package $package */
-                return [
-                    'weight' => [
-                        'value' => $package->getWeightAmount(),
-                        'unit'  => $package->getWeightUnit()
-                    ]
-                ];
+                return $package->toArray();
             }, $this->packages)
         ];
     }

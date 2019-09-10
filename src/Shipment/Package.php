@@ -31,6 +31,29 @@ class Package
      */
     protected $weightUnit = self::UNIT_OUNCE;
 
+
+    /**
+     * Optional labelMessage1
+     *
+     * @var string - Additional message to appear on shipping label
+     */
+    protected $labelMessage1 = "";
+
+    /**
+     * Optional labelMessage2
+     *
+     * @var string - Additional message to appear on shipping label
+     */
+    protected $labelMessage2 = "";
+
+    /**
+     * Optional labelMessage3
+     *
+     * @var string - Additional message to appear on shipping label
+     */
+    protected $labelMessage3 = "";
+
+
     /**
      * Package constructor.
      *
@@ -57,5 +80,50 @@ class Package
     public function getWeightUnit()
     {
         return $this->weightUnit;
+    }
+
+
+    public function setLabelMessage1($message)
+    {
+        $this->labelMessage1 = $message;
+    }
+
+    public function setLabelMessage2($message)
+    {
+        $this->labelMessage2 = $message;
+    }
+
+    public function setLabelMessage3($message)
+    {
+        $this->labelMessage3 = $message;
+    }
+
+    public function toArray()
+    {
+        $data = [
+            'weight' => [
+                'value' => $this->weightAmount,
+                'unit' => $this->weightUnit
+            ]
+        ];
+
+        $labelMessages = [];
+        $labelMessageKeys = [1,2,3];
+        foreach($labelMessageKeys as $key)
+        {
+            $labelMessageKey = "labelMessage" . $key;
+            if(!empty($this->{$labelMessageKey}))
+            {
+                $requestKey = "reference" . $key;
+                $labelMessages[$requestKey] = $this->{$labelMessageKey};
+            }
+        }
+
+        if(!empty($labelMessages))
+        {
+            $data['label_messages'] = $labelMessages;
+        }
+
+        return $data;
     }
 }
