@@ -158,7 +158,7 @@ class Label
 	{
 		$data = [
 			'shipment'   => $this->shipment->toArray(),
-			'test_label' => $this->isTestLabel,
+			//'test_label' => $this->isTestLabel,
 		];
 
 		$map = [
